@@ -52,3 +52,10 @@ python main.py
 | scikit-learn | Vectorización (BoW, TF-IDF) y reducción de dimensionalidad (PCA) |
 | matplotlib | Visualización 3D del espacio vectorial |
 | pandas | Tabla comparativa stemming vs lematización |
+
+## Visualización del espacio vectorial
+
+Representación 3D de las 100 palabras más frecuentes del corpus.
+A la izquierda el espacio **BoW** (por conteos), a la derecha **TF-IDF** (por importancia relativa).
+
+![Visualización 3D BoW vs TF-IDF](assets/Captura3D.png)
