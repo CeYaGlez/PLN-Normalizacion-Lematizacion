@@ -10,14 +10,18 @@ Cubre desde la normalización básica hasta representación vectorial y visualiz
 
 ## Instalación
 
+```bash
 python3 -m venv venv
 source venv/bin/activate
 pip install -r requirements.txt
 python -m spacy download es_core_news_sm
+```
 
 ## Uso
 
+```bash
 python main.py
+```
 
 ## ¿Qué hace?
 
@@ -32,10 +36,12 @@ python main.py
 
 ## Estructura del proyecto
 
+```
 .
-├── main.py        # Script principal
-├── libro.txt      # Texto a procesar
+├── main.py          # Script principal
+├── libro.txt        # Texto a procesar
 └── requirements.txt
+```
 
 ## Dependencias principales
 
