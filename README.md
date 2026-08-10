@@ -59,3 +59,10 @@ Representación 3D de las 100 palabras más frecuentes del corpus.
 A la izquierda el espacio **BoW** (por conteos), a la derecha **TF-IDF** (por importancia relativa).
 
 ![Visualización 3D BoW vs TF-IDF](assets/Captura3D.png)
+
+**Bag of Words (BoW)** representa cada oración como un vector de conteos de palabras,
+sin considerar el orden ni la relevancia de cada término.
+
+**TF-IDF** pondera cada palabra según qué tan frecuente es en una oración específica
+pero qué tan rara es en el resto del corpus — destacando términos distintivos
+y penalizando los genéricos.
