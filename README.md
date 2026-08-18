@@ -1,7 +1,7 @@
 # Procesamiento de Lenguaje Natural — PLN
 
 Proyecto de PLN que procesa un libro en texto plano usando spaCy y NLTK.
-Cubre desde la normalización básica hasta representación vectorial y visualización semántica en 3D.
+Cubre desde la normalización básica hasta representación vectorial, semántica distribucional con Word2Vec y visualización en 3D.
 
 ## Requisitos
 
@@ -33,6 +33,9 @@ python main.py
 6. Construye un corpus lematizado por oración
 7. Genera representaciones vectoriales con Bag of Words y TF-IDF
 8. Reduce dimensionalidad con PCA y visualiza el espacio vectorial en 3D
+9. Entrena un modelo Word2Vec (Skip-gram) sobre el corpus lematizado
+10. Explora similitudes semánticas entre palabras clave del libro
+11. Visualiza el espacio de embeddings en 3D
 
 ## Estructura del proyecto
 
@@ -40,7 +43,9 @@ python main.py
 .
 ├── main.py          # Script principal
 ├── libro.txt        # Texto a procesar
-├── assets/          # Imágenes y recursos
+├── assets/
+│   ├── Captura3D.png              # Visualización BoW vs TF-IDF
+│   └── embeddings_3d_goggins.png  # Visualización Word2Vec
 └── requirements.txt
 ```
 
@@ -71,6 +76,23 @@ resistencia física, distancia recorrida y fortaleza mental.
 
 **BoW te dice quién habla. TF-IDF te dice de qué habla.**
 
+## Visualización del espacio semántico (Word2Vec)
+
+A diferencia de BoW y TF-IDF, Word2Vec no representa documentos: **representa palabras** como vectores densos,
+capturando el contexto en el que cada una suele aparecer. Se usó **Skip-gram** (`sg=1`), que predice
+el contexto a partir de la palabra central y captura mejor las relaciones semánticas finas en corpus de tamaño moderado.
+El espacio de 50 dimensiones se redujo a 3 con PCA para visualizarlo.
+
+![Espacio Semántico Word2Vec - Embeddings 3D](assets/embeddings_3d_goggins.png)
+
+Los outliers más aislados — **"kilómetro"**, **"correr"**, **"entrenamiento"**, **"infernal"**, **"semana"** —
+ocupan posiciones únicas porque aparecen en contextos muy específicos y repetibles dentro del libro.
+**"bud"** queda completamente separado del núcleo al ser el apodo del padre de Goggins, con un contexto
+que no comparte con ninguna otra palabra. **"seal"** también se aleja del centro por el vocabulario
+propio del entrenamiento militar de élite.
+
+**TF-IDF te dice qué palabras importan. Word2Vec te dice qué palabras significan lo mismo.**
+
 ## Dependencias principales
 
 | Librería | Uso |
@@ -78,6 +100,6 @@ resistencia física, distancia recorrida y fortaleza mental.
 | spaCy | Tokenización, lematización, stop words |
 | NLTK | Stemming comparativo |
 | scikit-learn | Vectorización (BoW, TF-IDF) y reducción de dimensionalidad (PCA) |
+| gensim | Entrenamiento del modelo Word2Vec |
 | matplotlib | Visualización 3D del espacio vectorial |
 | pandas | Tabla comparativa stemming vs lematización |
-
