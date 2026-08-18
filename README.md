@@ -66,11 +66,27 @@ El modelo se entrenó con la arquitectura **Skip-gram**: dada una palabra, predi
 
 ![Espacio Semántico Word2Vec - Embeddings 3D](assets/embeddings_3d_goggins.png)
 
-La nube densa de la derecha concentra el vocabulario genérico. Lo interesante está en los outliers: `"kilómetro"` es el punto más aislado de todo el espacio porque siempre aparece en el mismo tipo de oración. Debajo de la nube, `"correr"`, `"carrera"`, `"hora"`, `"minuto"` y `"ciento"` quedaron agrupados solos, sin instrucciones, porque comparten universo semántico. Más a la izquierda, `"entrenamiento"`, `"infernal"` y `"semana"` forman su propio cluster: las semanas de entrenamiento brutal tienen su propia firma lingüística dentro del libro.
+La nube densa de la derecha concentra el vocabulario genérico. Lo interesante está en los outliers: `"kilómetro"` es el punto más aislado de todo el espacio porque siempre aparece en el mismo tipo de oración. Debajo de la nube, `"correr"`, `"carrera"`, `"hora"`, `"minuto"` y `"ciento"` quedaron agrupados sin instrucciones, porque comparten universo semántico. Más a la izquierda, `"entrenamiento"`, `"infernal"` y `"semana"` forman su propio cluster: las semanas de entrenamiento brutal tienen su propia firma lingüística dentro del libro.
 
 `"bud"`, el apodo del padre de Goggins, queda completamente aislado en el extremo izquierdo. Aparece en pasajes tan específicos y emocionalmente distintos que ninguna otra palabra del libro se le acerca. `"seal"` (SEAL Teams) también se separa por la misma razón.
 
 > **TF-IDF te dice qué palabras importan. Word2Vec te dice qué palabras significan lo mismo.**
+
+---
+
+## Limitaciones
+
+Word2Vec se entrenó únicamente con este libro, así que sus embeddings reflejan las relaciones del texto de Goggins, no del idioma en general. Una palabra puede quedar cerca de otra simplemente porque ambas aparecen en situaciones similares dentro de esta obra.
+
+Que una palabra aparezca aislada en la gráfica tampoco significa automáticamente que sea un tema central del libro. Su posición depende de la frecuencia, el tamaño del corpus, los hiperparámetros del modelo y la propia reducción dimensional. Las visualizaciones son evidencia de patrones estadísticos, no una interpretación definitiva del texto.
+
+---
+
+## Próximos pasos
+
+El proyecto puede extenderse bastante. Algunas direcciones interesantes serían comparar Skip-gram vs CBOW, experimentar con distintos tamaños de embedding y ventana de contexto, entrenar el modelo con varios libros del mismo autor o del mismo género, y aplicar clustering para detectar grupos de palabras automáticamente.
+
+La pregunta natural que sigue es: ¿los patrones que aparecen en este libro se mantienen cuando el corpus crece?
 
 ---
 
