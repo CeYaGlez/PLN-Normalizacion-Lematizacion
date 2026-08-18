@@ -157,7 +157,3 @@ python main.py
 | gensim | Entrenamiento del modelo Word2Vec |
 | matplotlib | Visualización 3D del espacio vectorial |
 | pandas | Tabla comparativa stemming vs lematización |
-
----
-
-**Nota:** En este README se usa "bud" para referirse a **BUD/S** (Basic Underwater Demolition/SEAL), el entrenamiento de los SEAL, y no al padre de David Goggins. La confusión es común por la similitud de nombres.
