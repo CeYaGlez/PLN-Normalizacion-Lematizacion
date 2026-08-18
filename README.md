@@ -54,9 +54,15 @@ Con el texto limpio, se generan dos tipos de representación vectorial, es decir
 
 ![Visualización 3D BoW vs TF-IDF](assets/Captura3D.png)
 
-**Bag of Words (BoW, izquierda)** construye un vector contando cuántas veces aparece cada palabra en cada oración. Es el modelo más simple posible. El problema se ve al instante: "yo" y "él" dominan y distorsionan todo el espacio por puro volumen de apariciones. Tienen sentido en una autobiografía, pero no dicen nada sobre los *temas* del libro.
+En el gráfico **BoW (izquierda)**, el modelo construye vectores contando cuántas veces aparece cada palabra en cada oración. El problema se ve al instante: **`yo`** y **`él`** flotan completamente aislados en los extremos del espacio, dominando el eje por puro volumen de apariciones. Por su frecuencia, la palabra *él* podría estar saturada de referencias al padre de Goggins o a sí mismo en tercera persona, pero el modelo de conteo no distingue el matiz. El resto del vocabulario se aplasta en una nube densa y confusa.
 
-**TF‑IDF (derecha)** corrige eso. Premia las palabras que son frecuentes en una oración específica pero raras en el resto del corpus, las que realmente la distinguen, y penaliza las genéricas. El resultado es radicalmente distinto: los outliers más alejados del centro son "kilómetro", "correr", "carrera", "poder" y "vida". Sin entender una sola palabra, el algoritmo identificó estadísticamente los temas centrales del libro. Incluso "él", que en BoW era ruido, se vuelve distintivo en TF‑IDF porque aparece concentrado en pasajes muy específicos.
+**TF‑IDF (derecha)** corrige eso. Premia las palabras que son frecuentes en una oración específica pero raras en el resto del corpus, y penaliza las genéricas. El resultado es radicalmente distinto:
+- **`kilómetro`, `correr`, `carrera`, `hora`, `minuto` y `ciento`** se agrupan formando un clúster nítido en la parte superior izquierda, identificando el tema central de las *carreras*.
+- **`él`** se desplaza al extremo inferior derecho, lejos del clúster central, lo que indica que aparece en pasajes narrativos muy específicos (probablemente biográficos), no en el discurso general.
+- **`poder`** se aísla en el extremo derecho, emergiendo como un concepto con su propia firma semántica (el "poder mental" o "poder de voluntad").
+- Incluso **`yo`** se reubica en el límite de la nube, ya sin distorsionar.
+
+El algoritmo identificó estadísticamente los temas centrales del libro sin entender una sola palabra.
 
 > **BoW te dice quién habla. TF‑IDF te dice de qué habla.**
 
@@ -70,13 +76,14 @@ El modelo se entrenó con la arquitectura **Skip‑gram**: dada una palabra, pre
 
 ![Espacio Semántico Word2Vec - Embeddings 3D](assets/embeddings_3d_goggins.png)
 
-La nube densa de la derecha concentra el vocabulario genérico. Lo interesante está en los outliers:
+El gráfico 3D revela clústeres semánticos asombrosos:
 
-- **`"kilómetro"`** es el punto más aislado de todo el espacio porque siempre aparece en el mismo tipo de oración.
-- Debajo de la nube, **`"correr"`, `"carrera"`, `"hora"`, `"minuto"` y `"ciento"`** quedaron agrupados sin instrucciones, porque comparten universo semántico.
-- Más a la izquierda, **`"entrenamiento"`, `"infernal"` y `"semana"`** forman su propio clúster: las semanas de entrenamiento brutal tienen su propia firma lingüística dentro del libro.
-- **`"bud"`** (abreviatura de **BUD/S**, *Basic Underwater Demolition/SEAL*, el durísimo entrenamiento de los SEAL) queda completamente aislado en el extremo izquierdo. Aparece en pasajes tan específicos y emocionalmente distintos que ninguna otra palabra del libro se le acerca.
-- **`"seal"`** (SEAL Teams) también se separa por la misma razón.
+- La densa nube central negra y morada agrupa todo el vocabulario genérico y de relleno del libro, donde las palabras aparecen en contextos demasiado variados para agruparse.
+- En la zona central baja, **`kilómetro`** flota como un punto solitario. Aparece casi siempre en el mismo tipo de oración (medir distancias en carreras), lo que lo convierte en un concepto único y distintivo.
+- A la izquierda, **`bud`** (abreviatura de **BUD/S**, *Basic Underwater Demolition/SEAL*, el entrenamiento de los SEAL) se encuentra absolutamente aislado en el extremo más lejano. Aparece en pasajes tan específicos y emocionalmente intensos que ninguna otra palabra se le acerca.
+- Por debajo de la nube central, **`correr`, `carrera`, `hora`, `minuto` y `ciento`** forman una agrupación compacta, reflejando sin instrucciones el universo del *running*.
+- En el sector medio-izquierdo, **`entrenamiento`, `infernal` y `semana`** crean su propio subclúster. El algoritmo detectó que estas palabras suelen aparecer juntas (las "semanas de entrenamiento infernal") y las posicionó en una misma zona del espacio semántico.
+- **`seal`** (los equipos SEAL) también se separa del grupo general, situándose en el límite de la nube y confirmando su naturaleza única en el texto.
 
 > **TF‑IDF te dice qué palabras importan. Word2Vec te dice qué palabras significan lo mismo.**
 
@@ -152,3 +159,5 @@ python main.py
 | pandas | Tabla comparativa stemming vs lematización |
 
 ---
+
+**Nota:** En este README se usa "bud" para referirse a **BUD/S** (Basic Underwater Demolition/SEAL), el entrenamiento de los SEAL, y no al padre de David Goggins. La confusión es común por la similitud de nombres.
