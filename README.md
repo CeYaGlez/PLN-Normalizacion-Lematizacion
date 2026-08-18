@@ -3,7 +3,7 @@
 > ¿Puede una computadora entender de qué habla un libro sin que nadie se lo explique?
 > Este proyecto lo intenta.
 
-Se tomó *Can't Hurt Me* de David Goggins en texto plano y se procesó con técnicas de PLN, desde limpiar el texto hasta entrenar un modelo que aprende el **significado** de las palabras por cómo se usan.
+Se tomó *Can't Hurt Me* de David Goggins en texto plano y se analizó con PLN (Procesamiento de Lenguaje Natural), el área de la inteligencia artificial que estudia cómo las computadoras pueden leer, interpretar y trabajar con texto humano.
 
 ---
 
@@ -21,15 +21,15 @@ Eso es exactamente lo que hace este proyecto. Y funciona.
 libro.txt
     │
     ▼
-Limpieza del texto          → quitar signos, stop words ("el", "la", "de"...)
+Limpieza del texto          → quitar signos y stop words ("el", "la", "de"...)
     │
     ▼
 Lematización                → "corriendo" y "corrió" se convierten en "correr"
     │
     ▼
-Vectorización               → cada palabra se convierte en números que la computadora puede comparar
+Vectorización               → cada palabra se convierte en números comparables
     │         │
-   BoW      TF-IDF          → dos formas distintas de "pesar" las palabras
+   BoW      TF-IDF          → dos formas distintas de pesar las palabras
     │
     ▼
 Word2Vec                    → el modelo aprende el significado por contexto
@@ -44,13 +44,15 @@ Visualización 3D            → el espacio matemático proyectado para poder ve
 
 ### Bag of Words vs TF-IDF
 
-Las mismas palabras, dos formas de representarlas.
+Antes de analizar el texto, se eliminan las *stop words*, palabras tan comunes ("el", "la", "y") que no aportan significado. Luego se aplica *lematización*: reducir cada palabra a su forma base para que "corriendo", "corrió" y "correrá" cuenten como la misma unidad.
+
+Con el texto limpio, se generan dos tipos de representación vectorial, es decir, se convierte cada palabra en un vector de números para que la computadora pueda operar con ella matemáticamente.
 
 ![Visualización 3D BoW vs TF-IDF](assets/Captura3D.png)
 
-**BoW (izquierda)** cuenta cuántas veces aparece cada palabra. Simple y directo, pero "yo" y "él" dominan todo el espacio. Tiene sentido en una autobiografía, pero no dicen nada útil sobre los *temas* del libro.
+**Bag of Words (BoW, izquierda)** construye un vector contando cuántas veces aparece cada palabra en cada oración. Es el modelo más simple posible. El problema se ve al instante: "yo" y "él" dominan y distorsionan todo el espacio por puro volumen de apariciones. Tienen sentido en una autobiografía, pero no dicen nada sobre los *temas* del libro.
 
-**TF-IDF (derecha)** premia las palabras que son frecuentes *en una oración* pero raras *en el resto del libro*, las que realmente la distinguen. Los outliers más alejados del centro son "kilómetro", "correr", "carrera", "poder" y "vida". Sin entender una sola palabra, el algoritmo identificó los temas centrales: resistencia física y fortaleza mental.
+**TF-IDF (derecha)** corrige eso. Premia las palabras que son frecuentes en una oración específica pero raras en el resto del corpus, las que realmente la distinguen, y penaliza las genéricas. El resultado es radicalmente distinto: los outliers más alejados del centro son "kilómetro", "correr", "carrera", "poder" y "vida". Sin entender una sola palabra, el algoritmo identificó estadísticamente los temas centrales del libro. Incluso "él", que en BoW era ruido, se vuelve distintivo en TF-IDF porque aparece concentrado en pasajes muy específicos.
 
 > **BoW te dice quién habla. TF-IDF te dice de qué habla.**
 
@@ -58,18 +60,15 @@ Las mismas palabras, dos formas de representarlas.
 
 ### Word2Vec — cuando las palabras aprenden su propio significado
 
-BoW y TF-IDF trabajan con conteos. Word2Vec hace algo más interesante: **aprende el contexto** en el que cada palabra aparece y le asigna una posición en un espacio matemático. Palabras que se usan en situaciones parecidas quedan cerca entre sí.
+BoW y TF-IDF trabajan con conteos. Word2Vec es una red neuronal que va más lejos: en lugar de contar palabras, **aprende el contexto** en el que aparecen. Cada palabra queda representada como un vector de 50 números (un *embedding*) posicionado en un espacio matemático donde las palabras con contextos similares quedan cerca entre sí. Sin que nadie le haya dicho qué significa ninguna.
 
-El modelo se entrenó con **Skip-gram**. En lugar de predecir una palabra a partir de sus vecinas, predice las vecinas a partir de la palabra central. Captura mejor las relaciones semánticas finas, especialmente en corpus de tamaño moderado.
+El modelo se entrenó con la arquitectura **Skip-gram**: dada una palabra, predice qué otras palabras suelen aparecer a su alrededor. Se eligió sobre su alternativa (CBOW) porque captura mejor las relaciones semánticas finas en corpus de tamaño moderado. Como el espacio tiene 50 dimensiones, se usó PCA (reducción de dimensionalidad) para proyectarlo a 3 y poder visualizarlo.
 
 ![Espacio Semántico Word2Vec - Embeddings 3D](assets/embeddings_3d_goggins.png)
 
-Lo que muestra la gráfica:
+La nube densa de la derecha concentra el vocabulario genérico. Lo interesante está en los outliers: `"kilómetro"` es el punto más aislado de todo el espacio porque siempre aparece en el mismo tipo de oración. Debajo de la nube, `"correr"`, `"carrera"`, `"hora"`, `"minuto"` y `"ciento"` quedaron agrupados solos, sin instrucciones, porque comparten universo semántico. Más a la izquierda, `"entrenamiento"`, `"infernal"` y `"semana"` forman su propio cluster: las semanas de entrenamiento brutal tienen su propia firma lingüística dentro del libro.
 
-- **La nube densa (derecha):** palabras de uso genérico que aparecen en contextos muy variados. El modelo no las diferencia con fuerza porque son intercambiables.
-- **La cola y los outliers:** "kilómetro", "correr", "entrenamiento", "infernal", "semana" aparecen siempre en el mismo tipo de oraciones. El modelo aprendió que son únicas.
-- **"bud"** está completamente aislado. Es el apodo del padre de Goggins y aparece en un contexto tan específico que ninguna otra palabra se le acerca.
-- **"seal"** (SEAL Teams) también queda separado. El entrenamiento militar de élite tiene su propio universo semántico dentro del libro.
+`"bud"`, el apodo del padre de Goggins, queda completamente aislado en el extremo izquierdo. Aparece en pasajes tan específicos y emocionalmente distintos que ninguna otra palabra del libro se le acerca. `"seal"` (SEAL Teams) también se separa por la misma razón.
 
 > **TF-IDF te dice qué palabras importan. Word2Vec te dice qué palabras significan lo mismo.**
 
