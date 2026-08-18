@@ -1,7 +1,3 @@
-Aquí tienes el README mejorado, con las correcciones necesarias (especialmente lo de *bud*), una redacción más clara y una estructura optimizada:
-
----
-
 # Procesamiento de Lenguaje Natural — PLN
 
 > ¿Puede una computadora entender de qué habla un libro sin que nadie se lo explique?
